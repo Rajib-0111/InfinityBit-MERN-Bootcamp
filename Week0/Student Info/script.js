@@ -1,3 +1,4 @@
+const chalk = require("chalk");
 const fs = require("fs");
 const ps = require("prompt-sync");
 
@@ -51,9 +52,9 @@ class student {
   }
 }
 
-function isNumber(string){
-  for(let i = 0; i < string.length; i++){
-    if(string.charCodeAt(i) < 48 || string.charCodeAt(i) > 57){
+function isNumber(string) {
+  for (let i = 0; i < string.length; i++) {
+    if (string.charCodeAt(i) < 48 || string.charCodeAt(i) > 57) {
       return false;
     }
   }
@@ -66,12 +67,12 @@ function menu() {
   console.log("-----------------------------------------");
   console.log("\t\t M E N U");
   console.log("-----------------------------------------");
-  console.log("1. Display All Student\n2. Details Of A Student\n3. Add New Student\n4. Alter A Record\n5. Exit");
+  console.log("1. Display All Student\n2. Details Of A Student\n3. Add New Student\n4. Alter A Record\n5. Delete A Record\n6. Exit");
   console.log("-----------------------------------------");
   choiceValue = parseInt(prompt("Enter Your Choice : "));
   console.log("-----------------------------------------");
   if (isNaN(choiceValue)) {
-    console.log("Incorrect Choice.....");
+    console.log(chalk.bgRed("Incorrect Choice....."));
     prompt("Press Enter To Continue : ");
     menu();
   }
@@ -101,11 +102,11 @@ function displayExact(tempRollNo) {
 
 function displayAll() {
   if (studData.length === 0) {
-    console.log("No Record Found....");
+    console.log(chalk.bgRed("No Record Found...."));
     return;
   }
   console.log("-----------------------------------------");
-  console.log("\t S T D E N T  L I S T");
+  console.log("\t S T U D E N T  L I S T");
   console.log("-----------------------------------------");
   console.log("\n---------------------------");
   console.log("NAME     ||    ROLL NO");
@@ -117,12 +118,12 @@ function displayAll() {
 
 try {
   const result = fs.readFileSync(filePath, "utf-8", "r");
-  console.log("File Opened Successfully....");
+  console.log(chalk.bgGreen("File Opened Successfully...."));
   studData = JSON.parse(result);
 }
 
 catch (error) {
-  console.log("No File Exist....");
+  console.log(chalk.bgRed("No File Exist...."));
 }
 
 finally {
@@ -136,20 +137,20 @@ finally {
         break;
       case 2:
         temp = prompt("Enter Roll Number : ");
-        if(!isNumber(temp)){
-          console.log("Invalid Roll Number");
+        if (!isNumber(temp)) {
+          console.log(chalk.bgRed("Invalid Roll Number"));
         }
         else {
           temp = parseInt(temp);
           opStatus = displayExact(temp);
           if (opStatus === -2) {
-            console.log("Empty List....");
+            console.log(chalk.bgRed("Empty List...."));
           }
           else if (opStatus === -1) {
-            console.log("No Record Found....");
+            console.log(chalk.bgRed("No Record Found...."));
           }
           else {
-            console.log("Record Found");
+            console.log(chalk.bgGreen("Record Found"));
             console.log("Name : ", studData[opStatus].name);
             console.log("Roll No : ", studData[opStatus].rollNo);
             console.log("Subject 1 : ", studData[opStatus].sub1);
@@ -164,53 +165,107 @@ finally {
         break;
       case 3:
         temp = prompt("Enter Roll Number : ");
-        if(!isNumber(temp)){
-          console.log("Invalid Roll Number");
+        if (!isNumber(temp)) {
+          console.log(chalk.bgRed("Invalid Roll Number"));
           break;
         }
         temp = parseInt(temp);
         opStatus = chkRollNumber(temp);
         if (opStatus >= 0) {
-          console.log("Roll Number Already Exist....");
+          console.log(chalk.bgRed("Roll Number Already Exist...."));
         }
         else {
           let newName = prompt("Enter Name : ");
           let newStud = new student(newName, temp);
           let temparray = [];
           let i;
-          for(i = 0; i < 5; i++){
-            temp = parseInt(prompt(`Enter Marks Of Subject${i+1} : `));
+          for (i = 0; i < 5; i++) {
+            temp = parseInt(prompt(`Enter Marks Of Subject${i + 1} : `));
             if (isNaN(temp) || temp < 0 || temp > 100) {
-              console.log("Invalid Marks");
+              console.log(chalk.bgRed("Invalid Marks"));
               break;
             }
             temparray[i] = temp;
           }
-          if(i >= 5){
+          if (i >= 5) {
             newStud.enterMarks(temparray[0], temparray[1], temparray[2], temparray[3], temparray[4]);
             newStud.calanalysis();
             studData.push(newStud);
-            console.log("Insertion Successful...");
+            console.log(chalk.bgGreen("Insertion Successful..."));
           }
         }
         break;
       case 4:
-        console.log(4);
+        temp = prompt("Enter Roll Number : ");
+        if (!isNumber(temp)) {
+          console.log(chalk.bgRed("Invalid Roll Number"));
+          break;
+        }
+        temp = parseInt(temp);
+        opStatus = chkRollNumber(temp);
+        if (opStatus < 0) {
+          console.log(chalk.bgRed("No Data Found...."));
+        }
+        else {
+          let index = displayExact(temp);
+          console.log(chalk.bgGreen("Current Data...."));
+          console.log("Name : ", studData[index].name);
+          console.log("Roll No : ", studData[index].rollNo);
+          console.log("Subject 1 : ", studData[index].sub1);
+          console.log("Subject 2 : ", studData[index].sub2);
+          console.log("Subject 3 : ", studData[index].sub3);
+          console.log("Subject 4 : ", studData[index].sub4);
+          console.log("Subject 5 : ", studData[index].sub5);
+
+          let newName = prompt("Enter New Name : ");
+          let temparray = [];
+          let i;
+          for (i = 0; i < 5; i++) {
+            temp = parseInt(prompt(`Enter New Marks Of Subject${i + 1} : `));
+            if (isNaN(temp) || temp < 0 || temp > 100) {
+              console.log(chalk.bgRed("Invalid Marks"));
+              break;
+            }
+            temparray[i] = temp;
+          }
+          if (i >= 5) {
+            studData[index].name = newName;
+            studData[index].enterMarks(temparray[0], temparray[1], temparray[2], temparray[3], temparray[4]);
+            studData[index].calanalysis();
+            console.log(chalk.bgGreen("Updation Successful..."));
+          }
+        }
         break;
       case 5:
-        console.log("Exitting.....\n");
+        temp = prompt("Enter Roll Number : ");
+        if (!isNumber(temp)) {
+          console.log(chalk.bgRed("Invalid Roll Number"));
+          break;
+        }
+        temp = parseInt(temp);
+        opStatus = chkRollNumber(temp);
+        if (opStatus < 0) {
+          console.log(chalk.bgRed("No Data Found"));
+        }
+        else{
+          studData = studData.filter((x, index) => opStatus != index);
+          console.log(chalk.bgGreen("Deletion Successfull"));
+        }
+        break;
+      case 6:
+        console.log(chalk.red("Exitting.....\n"));
         break;
       default:
-        console.log("Enter Choice Properly");
+        console.log(chalk.bgRed("Enter Choice Properly"));
     }
     prompt("Press Enter To Continue : ");
-  } while (choice != 5);
-  try{
+  } while (choice != 6);
+  try {
     let finaldata = JSON.stringify(studData);
     fs.writeFileSync(filePath, finaldata);
   }
-  catch(error){
-    console.log(error.message);
+  catch (error) {
+    console.log(chalk.bgRed(error.message));
   }
 }
 

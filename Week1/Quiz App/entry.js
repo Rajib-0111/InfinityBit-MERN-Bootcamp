@@ -121,6 +121,7 @@ finally {
         temp = parseInt(temp);
         newQuestion.setkey(temp);
         questions.push(newQuestion);
+        console.log(chalk.bgGreen("Question Set Successfully...."));
         break;
       case 2:
         display();

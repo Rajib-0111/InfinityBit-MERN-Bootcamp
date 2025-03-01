@@ -263,7 +263,7 @@ finally {
   try {
     let finaldata = JSON.stringify(studData);
     fs.writeFileSync(filePath, finaldata);
-    console.log(chalk.bgGreen("File Wrtten Successfully...."));
+    console.log(chalk.bgGreen("Data File Updated Successfully...."));
   }
   catch (error) {
     console.log(chalk.bgRed(error.message));

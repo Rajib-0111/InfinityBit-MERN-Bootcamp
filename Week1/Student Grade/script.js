@@ -117,9 +117,16 @@ function displayAll() {
 }
 
 try {
-  const result = fs.readFileSync(filePath, "utf-8", "r");
+  const result = fs.readFileSync(filePath, "utf-8");
   console.log(chalk.bgGreen("File Opened Successfully...."));
-  studData = JSON.parse(result);
+  const rawData = JSON.parse(result);
+
+  studData = rawData.map(obj => {
+    let temp = new student(obj.name, obj.rollNo);
+    temp.enterMarks(obj.sub1, obj.sub2, obj.sub3, obj.sub4, obj.sub5);
+    temp.calanalysis();
+    return temp;
+  })
 }
 
 catch (error) {
@@ -207,15 +214,14 @@ finally {
           console.log(chalk.bgRed("No Data Found...."));
         }
         else {
-          let index = displayExact(temp);
           console.log(chalk.bgGreen("Current Data...."));
-          console.log("Name : ", studData[index].name);
-          console.log("Roll No : ", studData[index].rollNo);
-          console.log("Subject 1 : ", studData[index].sub1);
-          console.log("Subject 2 : ", studData[index].sub2);
-          console.log("Subject 3 : ", studData[index].sub3);
-          console.log("Subject 4 : ", studData[index].sub4);
-          console.log("Subject 5 : ", studData[index].sub5);
+          console.log("Name : ", studData[opStatus].name);
+          console.log("Roll No : ", studData[opStatus].rollNo);
+          console.log("Subject 1 : ", studData[opStatus].sub1);
+          console.log("Subject 2 : ", studData[opStatus].sub2);
+          console.log("Subject 3 : ", studData[opStatus].sub3);
+          console.log("Subject 4 : ", studData[opStatus].sub4);
+          console.log("Subject 5 : ", studData[opStatus].sub5);
 
           let newName = prompt("Enter New Name : ");
           let temparray = [];
@@ -229,9 +235,9 @@ finally {
             temparray[i] = temp;
           }
           if (i >= 5) {
-            studData[index].name = newName;
-            studData[index].enterMarks(temparray[0], temparray[1], temparray[2], temparray[3], temparray[4]);
-            studData[index].calanalysis();
+            studData[opStatus].name = newName;
+            studData[opStatus].enterMarks(temparray[0], temparray[1], temparray[2], temparray[3], temparray[4]);
+            studData[opStatus].calanalysis();
             console.log(chalk.bgGreen("Updation Successful..."));
           }
         }

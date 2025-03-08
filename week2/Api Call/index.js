@@ -12,8 +12,8 @@ function fakeApiCall(){
   });
 }
 
-fakeApiCall().
-  then(result => {
+fakeApiCall()
+  .then(result => {
     console.log(result);
   })
   .catch(err => {

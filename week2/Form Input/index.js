@@ -9,7 +9,7 @@ const loadfile =  () => {
     return JSON.parse(fs.readFileSync("./data.json", "utf-8"));
   }
   catch(err){
-    console.error("Error Loading Data", err);
+    console.error("No Data File Found", err);
     return [];
   }
 };

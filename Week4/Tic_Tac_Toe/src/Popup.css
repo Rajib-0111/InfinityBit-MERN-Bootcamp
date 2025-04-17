@@ -1,0 +1,33 @@
+.popup{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.message{
+  display: inline-block;
+  width: 100%;
+  font-size: 4rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.resetbtn{
+  margin-top: 2%;
+  width: 10vw;
+  height: 5vh;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  border: 2px solid black;
+  transition: .5s;
+}
+
+.resetbtn:hover{
+  background-color: rgb(68, 238, 68);
+}
+
+@media screen and (max-width: 480px){
+  .resetbtn{
+    width: 30vw;
+  }
+}

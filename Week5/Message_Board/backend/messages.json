@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1000,
+    "message": "I am Happy",
+    "mood": "happy",
+    "user": "annonymous"
+  },
+  {
+    "user": "Rajib",
+    "message": "I would like to tell you that I am mad",
+    "mood": "angry",
+    "id": 1001
+  }
+]
